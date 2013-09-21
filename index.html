@@ -61,9 +61,7 @@
 	$.ajax({
         type: "GET",
 			url: "./playlist/playlist.xml",
-			//url: "./playlist/playlist.xml",
 			dataType: "xml",
-			//dataType: "xml",
 			success: function(result) {
 				$(result).find('track').each(function(){
 					var self = $(this),

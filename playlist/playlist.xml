@@ -1,0 +1,30 @@
+<playlist>
+	<track>
+		<title>Waving Not Drowning</title>
+		<artist>Orbital</artist>
+		<mp3>../mp3/Orbital-The Altogether-WavingNotDrowning.mp3</mp3>
+		<free>false</free>
+		<duration>4:31</duration>
+	</track>
+	<track>
+		<title>Crazy People</title>
+		<artist>3 Monkeys</artist>
+		<mp3>../mp3/3Monkeys-CrazyPeople.mp3</mp3>
+		<free>false</free>
+		<duration>5:17</duration>
+	</track>
+	<track>
+		<title>Voices</title>
+		<artist>Bedrock</artist>
+		<mp3>../mp3/Bedrock- Voices.mp3</mp3>
+		<free>false</free>
+		<duration>4:37</duration>
+	</track>
+	<track>
+		<title>Timeless</title>
+		<artist>Transa</artist>
+		<mp3>../mp3/Transa-Timeless.mp3</mp3>
+		<free>false</free>
+		<duration>6:02</duration>
+	</track>
+</playlist>

@@ -7,4 +7,4 @@ I am in the process of converting the circle player css to less and adding addin
 
 View the live player at <a href="http://www.beyondhyper.com/jplayer/">http://www.beyondhyper.com/jplayer/</a>
 
-Many, many thanks to <a href="https://github.com/thepag">Mark Panaghiston</a> (<a href="https://twitter.com/thepag">@thepag</a>) for such a great library!
+Many, many thanks to <a href="https://github.com/thepag">Mark Panaghiston</a> (<a href="https://twitter.com/thepag">@thepag</a>) for such a great framework!

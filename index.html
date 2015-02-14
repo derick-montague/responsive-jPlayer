@@ -4,8 +4,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0;">
 		<title>Responsive jPlayer Layout</title>
-		<link rel="stylesheet" href="circle.skin/circle.player.css" />
 		<link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css' />
+		<link rel="stylesheet" href="dist/css/app.min.css" />
+		<script src="dist/js/shims.min.js"></script>
 	</head>
 	<body>
 	<div id="white-noise-player" class="cp-jplayer"></div>
@@ -43,9 +44,12 @@
 			</div>
 			<h2>About Me</h2>
 			<div id="about">
-				<p>
-					This was designed by a friend of mine with the purpose of streaming his music. It was a fun project and I am grateful he selected me to code it and allowed me to add it to <a href="/portfolio">my portfolio</a>.
-				</p>
+				<ul>
+					<li>jPlayer: <a href="https://github.com/thepag">Mark Panaghiston - @thepag</a></li>
+					<li>jPlayer Skin: <a href="http://www.danlatterner.com/#dan">Dan Latterner</a></li>
+					<li>Skin Implimentation: <a href="http://www.beyondhyper.com/about">Derick Montague</a></li>
+					<li>Music: Snorkel - Indie Rock from Kalamazoo, MI</li>
+				</ul>
 			</div>
 			<div id="contact">
 				<h2>Contact Me</h2>
@@ -53,59 +57,7 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script src="scripts/whitenoise.player.min.js"></script>
-	<script>
-	$(document).ready(function(){
-	// Get the Playlist from the xml file
-	$.ajax({
-        type: "GET",
-			url: "./playlist/playlist.xml",
-			dataType: "xml",
-			success: function(result) {
-				$(result).find('track').each(function(){
-					var self = $(this),
-						 mytitle = self.find('title').text(),
-						 myartist = self.find('artist').text(),
-						 mymp3 = self.find('mp3').text(),
-						 myduration = self.find('duration').text(),
-						 playlist = JSON.stringify({ title: mytitle, artist : myartist, mp3 : mymp3, duration : myduration }),// Convert the XML nodes into JSON formatted strings
-						 playlistObject = $.parseJSON(playlist); // Convert the JSON formatted strings into JSON objects and add to playlist
-					
-					myPlaylist.add(playlistObject);
-			});
-		}
-	});
-
-	 // WhiteNoise Player instance
-		var whiteNoise = new CirclePlayer("#white-noise-player", {}, {
-				cssSelectorAncestor: "#cp_container"
-		});
-	
-		// WhiteNoise Playlist instance
-		var myPlaylist = new jPlayerPlaylist({
-			jPlayer: "#white-noise-player",
-			cssSelectorAncestor: "#cp_container",
-		}, [ 
-				// Playlist is created when the page loads via ajax
-			], 
-		{
-			playlistOptions: {
-			  autoPlay: false, // self explanatory
-			  loopOnPrevious: false, //  If loop is active, the playlist will loop back to the end when executing previous()
-			  shuffleOnLoop: true, //  If loop and shuffle are active, the playlist will shuffle when executing next() on the last item
-			  enableRemoveControls: false, // Adds an x that allows user to remove songs from playlist
-			  displayTime: 0, // how fast the playlist transitions on page load
-			  addTime: 'fast', // transition time when adding a song
-			  removeTime: 'fast', // transition time when removing a song
-			  shuffleTime: 'slow' // transition time when shuffling playlist
-			},
-			swfPath: "../scripts",
-			supplied: "mp3", // add the file format extension you will be streaming
-			wmode: "window"
-	
-		});
-	});
-	</script>
+	<script src="dist/scripts/playlist/playlist.js"></script>
+	<script src="dist/js/app.min.js"></script>
 	</body>
 </html>

@@ -1,0 +1,250 @@
+.cp-container {
+	width: 162px;
+	height: 162px;
+	background: url("../img/bgr.png") 0 0 no-repeat;
+	padding: 0;
+}
+
+.cp-buffer-1,
+.cp-buffer-2,
+.cp-progress-1,
+.cp-progress-2 {
+	width: 162px;
+	height: 162px;
+	clip:rect(0, 81px, 162px, 0px);
+
+	-moz-border-radius: 81px;
+	-webkit-border-radius: 81px;
+	border-radius: 81px;
+}
+
+.cp-buffer-1,
+.cp-buffer-2 {
+	background: url("../img/buffer.png") 0 0 no-repeat;
+}
+
+/* FALLBACK for .progress
+ * (24 steps starting from 1hr filled progress, Decrease second value by 162px for next step)
+ * (It needs the container selector to work. Or use div)
+ * This was not updated for white noise player to do use case
+  
+
+.cp-container .cp-fallback {
+	background: url("progress_sprite.jpg") no-repeat;
+	background-position: 0 162px; 
+}
+*/
+
+.cp-progress-1,
+.cp-progress-2 {
+	background: url("../img/progress.png") 0 0 no-repeat;
+} 
+
+.cp-buffer-holder,
+.cp-progress-holder,
+.cp-circle-control {
+	width:162px;
+	height:162px;
+} 
+
+.cp-buffer-holder,
+.cp-progress-holder {
+	clip:rect(0, 162px, 162px, 81px);
+}
+
+.cp-controls {
+	padding: 53px;
+	list-style: none;	
+
+	li {
+
+		a {
+			width: 60px;
+			height: 60px;    
+		}
+
+		.cp-play {
+			background: url("../img/controls.png") 0 0 no-repeat;
+
+			&:hover {
+				background: url("../img/controls.png") -60px 0 no-repeat;
+			}
+		}
+
+		.cp-pause {
+			background: url("../img/controls.png") 0 -60px no-repeat;
+
+			&:hover {
+				background: url("../img/controls.png") -60px -60px no-repeat;
+			}
+		}
+	}
+}
+
+
+body {
+	background: url("../img/pg-bgd.png");
+	font: 80%/1.4 Arial, Helvetica, sans-serif;
+	color: #949494;
+}
+img {
+	max-width: 100%;	
+}
+#wrapper {
+	max-width: 860px;
+	margin: 0 0 10px;	
+}
+header {
+	max-width: 845px;
+}
+#logo {
+	background: url("../img/white-noise-logoX2.jpg") no-repeat;
+	background-size: 320px 61px;
+	height: 61px;
+	width: 320px;
+	margin: auto;
+}
+#content {
+	background: url("../img/noise-bgd.jpg") repeat-x;
+}
+#contact {
+	text-align: center;
+	padding: 10px 0;
+}
+#music {
+	position: none;
+	border-radius: 5px 5px 0 0;
+	padding: 10px 0 0;
+}
+h2 {
+	font-family: 'Poiret One', sans-serif;
+	text-shadow: 1px 1px 1px rgba(0,0,0,.6);
+	font-size: 2.5em;
+	text-align: center;	
+}	
+a {
+	color: #80b9ff;
+	text-decoration: none;
+	text-shadow: 0 1px 2px #000;
+}
+a:hover,a:focus,a:active {
+	outline: none;	
+	text-decoration: underline;
+}
+#about {
+	background: #000;
+	background: rgba(0,0,0,.75);
+	min-height: 66px;
+	font-size: 1.2em;
+}
+#about p {
+	padding: 20px 3% 20px 10%;
+	text-align: right;
+}
+#player-wrapper {
+	margin-top: -10px;	
+}
+.jp-playlist ul {
+	border-radius: 10px;
+	box-shadow:	0 0 5px #555, inset 0 0 6px #111;
+	border: 1px solid #555;
+	margin: -150px 1% 10px 19%;
+	overflow: hidden;
+	padding: 0;
+}
+.jp-playlist li {
+	background: url("../img/playlist-item-bgd.png") repeat-x;
+	box-shadow: 0 1px 1px #333;
+	margin: 1px;
+	padding: 9px 0 9px 100px;
+}
+.jp-playlist li:hover {
+	background-color: rgba(255,255,255,.75);
+}
+li.jp-playlist-current {
+	background: url("../img/playlist-item-current-bgd.png") repeat-x;	
+	
+}
+.jp-playlist li:first-child {
+	border-radius: 0 7px 0 0	
+}
+.jp-playlist li:last-child {
+	border-radius: 0 0 7px 0	
+}
+.jp-playlist li a {
+	display: block;
+	overflow: hidden;
+}
+.jp-duration {
+	display:none;
+}
+#player-wrapper {
+	position: absolute;
+	top: 25px;
+	left: 0;	
+}
+
+@media screen and (min-width: 480px) {
+	header {
+		margin: 0 15px;	
+	}
+	.jp-playlist ul {
+		margin-left: 17%;
+	}
+	.jp-duration {
+		display: inline-block;
+		float: right;
+		margin-right: 10px;	
+	}
+}
+@media screen and (min-width: 640px) {
+	body {
+		font-size: 100%;
+	}
+	h2 {
+		margin: auto;
+		font-size: 3.5em;
+	}
+	#wrapper {
+		margin: 0 10px auto;	
+	}
+	#logo {
+		background-size: auto;
+		height: 122px;
+		width: 620px;
+	}
+	#content {
+		border-radius: 15px;	
+	}
+	.jp-playlist ul {
+		margin-left: 10%;
+	}
+	#about p {
+		padding-left: 30%;	
+	}
+}
+@media screen and (min-width: 1024px) {
+	header {
+		max-width: inherit;
+		margin: auto;
+	}
+	#logo {
+		background: url(../img/white-noise-logo-lg.jpg) right no-repeat;
+		background-size: auto;
+		height: 313px;
+		float: left;
+		width: 33.125%;
+	}
+	#wrapper {
+		width: 65%;
+		float: left;
+		margin: 30px auto auto;	
+	}
+	.jp-playlist ul {
+		margin-left: 9%;
+	}
+	
+	.jp-playlist li {
+		padding-left: 15%;
+	}
+}

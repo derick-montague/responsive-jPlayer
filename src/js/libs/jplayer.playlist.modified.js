@@ -2,19 +2,20 @@
  * Playlist Object for the jPlayer Plugin
  * http://www.jplayer.org
  *
- * Copyright (c) 2009 - 2011 Happyworm Ltd
- * Dual licensed under the MIT and GPL licenses.
- *  - http://www.opensource.org/licenses/mit-license.php
- *  - http://www.gnu.org/copyleft/gpl.html
+ * Copyright (c) 2009 - 2014 Happyworm Ltd
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/MIT
  *
  * Author: Mark J Panaghiston
- * Version: 2.1.0 (jPlayer 2.1.0)
- * Date: 1st September 2011
+ * Version: 2.4.1
+ * Date: 19th November 2014
+ *
+ * Requires:
+ *  - jQuery 1.7.0+
+ *  - jPlayer 2.8.2+
  */
 
-/* Code verified using http://www.jshint.com/ */
-/*jshint asi:false, bitwise:false, boss:false, browser:true, curly:true, debug:false, eqeqeq:true, eqnull:false, evil:false, forin:false, immed:false, jquery:true, laxbreak:false, newcap:true, noarg:true, noempty:true, nonew:true, nomem:false, onevar:false, passfail:false, plusplus:false, regexp:false, undef:true, sub:false, strict:false, white:false */
-/*global  jPlayerPlaylist: true, jQuery:false, alert:false */
+/*global jPlayerPlaylist:true */
 
 (function($, undefined) {
 
@@ -27,7 +28,31 @@
 		this.removing = false; // Flag is true during remove animation, disabling the remove() method until complete.
 
 		this.cssSelector = $.extend({}, this._cssSelector, cssSelector); // Object: Containing the css selectors for jPlayer and its cssSelectorAncestor
-		this.options = $.extend(true, {}, this._options, options); // Object: The jPlayer constructor options for this playlist and the playlist options
+		this.options = $.extend(true, {
+			keyBindings: {
+				next: {
+					key: 221, // ]
+					fn: function() {
+						self.next();
+					}
+				},
+				previous: {
+					key: 219, // [
+					fn: function() {
+						self.previous();
+					}
+				},
+				shuffle: {
+					key: 83, // s
+					fn: function() {
+						self.shuffle();
+					}
+				}
+			},
+			stateClass: {
+				shuffled: "jp-state-shuffled"
+			}
+		}, this._options, options); // Object: The jPlayer constructor options for this playlist and the playlist options
 
 		this.playlist = []; // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
 		this.original = []; // Array of Objects: The original playlist
@@ -35,7 +60,7 @@
 		this._initPlaylist(playlist); // Copies playlist to this.original. Then mirrors this.original to this.playlist. Creating two arrays, where the element pointers match. (Enables pointer comparison.)
 
 		// Setup the css selectors for the extra interface items used by the playlist.
-		this.cssSelector.title = this.cssSelector.cssSelectorAncestor + " .jp-title"; // Note that the text is written to the decendant li node.
+		this.cssSelector.details = this.cssSelector.cssSelectorAncestor + " .jp-details"; // Note that jPlayer controls the text in the title element.
 		this.cssSelector.playlist = this.cssSelector.cssSelectorAncestor + " .jp-playlist";
 		this.cssSelector.next = this.cssSelector.cssSelectorAncestor + " .jp-next";
 		this.cssSelector.previous = this.cssSelector.cssSelectorAncestor + " .jp-previous";
@@ -51,60 +76,66 @@
 		};
 
 		// Create a ready event handler to initialize the playlist
-		$(this.cssSelector.jPlayer).bind($.jPlayer.event.ready, function(event) {
+		$(this.cssSelector.jPlayer).bind($.jPlayer.event.ready, function() {
 			self._init();
 		});
 
 		// Create an ended event handler to move to the next item
-		$(this.cssSelector.jPlayer).bind($.jPlayer.event.ended, function(event) {
+		$(this.cssSelector.jPlayer).bind($.jPlayer.event.ended, function() {
 			self.next();
 		});
 
 		// Create a play event handler to pause other instances
-		$(this.cssSelector.jPlayer).bind($.jPlayer.event.play, function(event) {
+		$(this.cssSelector.jPlayer).bind($.jPlayer.event.play, function() {
 			$(this).jPlayer("pauseOthers");
 		});
 
 		// Create a resize event handler to show the title in full screen mode.
 		$(this.cssSelector.jPlayer).bind($.jPlayer.event.resize, function(event) {
 			if(event.jPlayer.options.fullScreen) {
-				$(self.cssSelector.title).show();
+				$(self.cssSelector.details).show();
 			} else {
-				$(self.cssSelector.title).hide();
+				$(self.cssSelector.details).hide();
 			}
 		});
 
 		// Create click handlers for the extra buttons that do playlist functions.
-		$(this.cssSelector.previous).click(function() {
+		$(this.cssSelector.previous).click(function(e) {
+			e.preventDefault();
 			self.previous();
-			$(this).blur();
-			return false;
+			self.blur(this);
 		});
 
-		$(this.cssSelector.next).click(function() {
+		$(this.cssSelector.next).click(function(e) {
+			e.preventDefault();
 			self.next();
-			$(this).blur();
-			return false;
+			self.blur(this);
 		});
 
-		$(this.cssSelector.shuffle).click(function() {
+		$(this.cssSelector.shuffle).click(function(e) {
+			e.preventDefault();
+			if(self.shuffled && $(self.cssSelector.jPlayer).jPlayer("option", "useStateClassSkin")) {
+				self.shuffle(false);
+			} else {
 			self.shuffle(true);
-			return false;
+			}
+			self.blur(this);
 		});
-		$(this.cssSelector.shuffleOff).click(function() {
+		$(this.cssSelector.shuffleOff).click(function(e) {
+			e.preventDefault();
 			self.shuffle(false);
-			return false;
+			self.blur(this);
 		}).hide();
 
 		// Put the title in its initial display state
 		if(!this.options.fullScreen) {
-			$(this.cssSelector.title).hide();
+			$(this.cssSelector.details).hide();
 		}
 
 		// Remove the empty <li> from the page HTML. Allows page to be valid HTML, while not interfereing with display animations
 		$(this.cssSelector.playlist + " ul").empty();
 
-		// Create .live() handlers for the playlist items along with the free media and remove controls.
+		// Create .on() handlers for the playlist items along with the free media and remove controls.
 		this._createItemHandlers();
 
 		// Instance jPlayer
@@ -174,7 +205,7 @@
 			var self = this;
 			this.playlist = [];
 			// Make both arrays point to the same object elements. Gives us 2 different arrays, each pointing to the same actual object. ie., Not copies of the object.
-			$.each(this.original, function(i,v) {
+			$.each(this.original, function(i) {
 				self.playlist[i] = self.original[i];
 			});
 		},
@@ -188,7 +219,7 @@
 
 			if(instant && !$.isFunction(instant)) {
 				$(this.cssSelector.playlist + " ul").empty();
-				$.each(this.playlist, function(i,v) {
+				$.each(this.playlist, function(i) {
 					$(self.cssSelector.playlist + " ul").append(self._createListItem(self.playlist[i]));
 				});
 				this._updateControls();
@@ -199,7 +230,7 @@
 					var $this = $(this);
 					$(this).empty();
 
-					$.each(self.playlist, function(i,v) {
+					$.each(self.playlist, function(i) {
 						$this.append(self._createListItem(self.playlist[i]));
 					});
 					self._updateControls();
@@ -225,6 +256,7 @@
 
 			// Create links to free media
 			if(media.free) {
+				console.log(media);
 				var first = true;
 				listItem += "<span class='" + this.options.playlistOptions.freeGroupClass + "'>(";
 				$.each(media, function(property,value) {
@@ -234,45 +266,45 @@
 						} else {
 							listItem += " | ";
 						}
-						listItem += "<a class='" + self.options.playlistOptions.freeItemClass + "' href='" + value + "' tabindex='1'>" + property + "</a>";
+						listItem += "<a class='" + self.options.playlistOptions.freeItemClass + "' href='" + value + "' tabindex='-1'>" + property + "</a>";
 					}
 				});
 				listItem += ")</span>";
 			}
 
 			// The title is given next in the HTML otherwise the float:right on the free media corrupts in IE6/7
-			listItem += "<a href='javascript:;' class='" + this.options.playlistOptions.itemClass + "' tabindex='1'>" + media.title + (media.artist ? " <span class='jp-artist'>by " + media.artist + "</span>" : "") + (media.duration ? "<span class='jp-duration'>" + media.duration + "</span>":"") + "</a>";
-			listItem += "</div>" + "</li>";
+			listItem += "<a href='javascript:;' class='" + this.options.playlistOptions.itemClass + "' tabindex='0'>" + media.title + (media.artist ? " <span class='jp-artist'>by " + media.artist + "</span>" : "") + (media.duration ? "<span class='jp-duration'>" + media.duration + "</span>":"") + "</a>";
+			listItem += "</div></li>";
 
 			return listItem;
 		},
 		_createItemHandlers: function() {
 			var self = this;
-			// Create .live() handlers for the playlist items
-			$(this.cssSelector.playlist + " a." + this.options.playlistOptions.itemClass).die("click").live("click", function() {
+			// Create live handlers for the playlist items
+			$(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.itemClass).on("click", "a." + this.options.playlistOptions.itemClass, function(e) {
+				e.preventDefault();
 				var index = $(this).parent().parent().index();
 				if(self.current !== index) {
 					self.play(index);
 				} else {
 					$(self.cssSelector.jPlayer).jPlayer("play");
 				}
-				$(this).blur();
-				return false;
+				self.blur(this);
 			});
 
-			// Create .live() handlers that disable free media links to force access via right click
-			$(self.cssSelector.playlist + " a." + this.options.playlistOptions.freeItemClass).die("click").live("click", function() {
+			// Create live handlers that disable free media links to force access via right click
+			$(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.freeItemClass).on("click", "a." + this.options.playlistOptions.freeItemClass, function(e) {
+				e.preventDefault();
 				$(this).parent().parent().find("." + self.options.playlistOptions.itemClass).click();
-				$(this).blur();
-				return false;
+				self.blur(this);
 			});
 
-			// Create .live() handlers for the remove controls
-			$(self.cssSelector.playlist + " a." + this.options.playlistOptions.removeItemClass).die("click").live("click", function() {
+			// Create live handlers for the remove controls
+			$(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.removeItemClass).on("click", "a." + this.options.playlistOptions.removeItemClass, function(e) {
+				e.preventDefault();
 				var index = $(this).parent().parent().index();
 				self.remove(index);
-				$(this).blur();
-				return false;
+				self.blur(this);
 			});
 		},
 		_updateControls: function() {
@@ -282,18 +314,25 @@
 				$(this.cssSelector.playlist + " ." + this.options.playlistOptions.removeItemClass).hide();
 			}
 			if(this.shuffled) {
+				$(this.cssSelector.jPlayer).jPlayer("addStateClass", "shuffled");
+			} else {
+				$(this.cssSelector.jPlayer).jPlayer("removeStateClass", "shuffled");
+			}
+			if($(this.cssSelector.shuffle).length && $(this.cssSelector.shuffleOff).length) {
+				if(this.shuffled) {
 				$(this.cssSelector.shuffleOff).show();
 				$(this.cssSelector.shuffle).hide();
 			} else {
 				$(this.cssSelector.shuffleOff).hide();
 				$(this.cssSelector.shuffle).show();
 			}
+			}
 		},
 		_highlight: function(index) {
 			if(this.playlist.length && index !== undefined) {
 				$(this.cssSelector.playlist + " .jp-playlist-current").removeClass("jp-playlist-current");
 				$(this.cssSelector.playlist + " li:nth-child(" + (index + 1) + ")").addClass("jp-playlist-current").find(".jp-playlist-item").addClass("jp-playlist-current");
-				$(this.cssSelector.title + " li").html(this.playlist[index].title + (this.playlist[index].artist ? " <span class='jp-artist'>by " + this.playlist[index].artist + "</span>" : "") + (this.playlist[index].duration ? "<span class='jp-duration'>" + this.playlist[index].duration + "</span>":""));
+				//$(this.cssSelector.details + " li").html("<span class='jp-title'>" + this.playlist[index].title + "</span>" + (this.playlist[index].artist ? " <span class='jp-artist'>by " + this.playlist[index].artist + "</span>" : "") + (this.playlist[index].duration ? "<span class='jp-duration'>" + this.playlist[index].duration + "</span>" : ""));
 			}
 		},
 		setPlaylist: function(playlist) {
@@ -337,7 +376,7 @@
 
 							if(self.shuffled) {
 								var item = self.playlist[index];
-								$.each(self.original, function(i,v) {
+								$.each(self.original, function(i) {
 									if(self.original[i] === item) {
 										self.original.splice(i, 1);
 										return false; // Exit $.each
@@ -446,6 +485,11 @@
 
 					$(this).slideDown(self.options.playlistOptions.shuffleTime);
 				});
+			}
+		},
+		blur: function(that) {
+			if($(this.cssSelector.jPlayer).jPlayer("option", "autoBlur")) {
+				$(that).blur();
 			}
 		}
 	};

@@ -1,0 +1,23 @@
+{
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "boss": true,
+  "eqnull": true,
+  "node": true,
+  "laxcomma": true,
+  "globals" : {
+    "jQuery": true,
+    "moment": true,
+    "Modernizr": true,
+    "google": true,
+    "sessionStorage": true,
+    "document": true,
+    "window": true
+  }
+}

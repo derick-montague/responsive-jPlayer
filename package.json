@@ -1,0 +1,26 @@
+{
+  "name": "white-noise-jplayer",
+  "version": "1.1.0",
+  "description": "Responsive circle jPlayer with playlist and custom theme",
+  "main": "gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Derick Montague",
+  "license": "BSD",
+  "dependencies": {
+    "grunt": "0.4.x"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-copy": "^0.7.0",
+    "grunt-contrib-cssmin": "^0.11.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-less": "^1.0.0",
+    "grunt-contrib-uglify": "^0.7.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-tasks": "^0.1.3"
+  }
+}

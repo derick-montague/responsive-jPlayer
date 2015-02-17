@@ -37,7 +37,7 @@ module.exports = {
 				files: [
 					{expand: true, cwd: '<%= folders.src %>/img',  src: ['*'], dest: '<%= folders.build %>/img'},
 					{expand: true, cwd: '<%= folders.src %>/scripts',  src: ['*'], dest: '<%= folders.build %>/scripts'},
-					{expand: true, cwd: '<%= folders.src %>/js/app/playlist',  src: ['*'], dest: '<%= folders.build %>/scripts/playlist'}
+					{expand: true, cwd: '<%= folders.src %>/js/app/playlist',  src: ['*'], dest: '<%= folders.build %>/playlist'}
 				]	
 			}
 		},

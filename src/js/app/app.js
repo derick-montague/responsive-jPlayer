@@ -1,30 +1,7 @@
 (function() {
-	var testPlaylist = myplaylist;
-	
-	
-/*
-	$.ajax({
-        type: "GET",
-		url: "../dist/scripts/playlist/playlist.xml",
-		dataType: "xml",
-		success: function(result) {
-			$(result).find('track').each(function(){
-				var self = $(this),
-					 mytitle = self.find('title').text(),
-					 myartist = self.find('artist').text(),
-					 mymp3 = self.find('mp3').text(),
-					 myduration = self.find('duration').text(),
-					 playlist = JSON.stringify({ title: mytitle, artist : myartist, mp3 : mymp3, duration : myduration }),// Convert the XML nodes into JSON formatted strings
-					 playlistObject = $.parseJSON(playlist); // Convert the JSON formatted strings into JSON objects and add to playlist
-				console.log(playlistObject);
-				myPlaylist.add(playlistObject);
-			});
-		}
-	});
+	var useJsonPlaylist = true, 
 
-*/
-
-	 // WhiteNoise Player instance
+		// WhiteNoise Player instance
 		whiteNoise = new CirclePlayer("#white-noise-player", {}, {
 			cssSelectorAncestor: "#cp_container"
 		}),
@@ -51,6 +28,32 @@
 			supplied: "mp3", // add the file format extension you will be streaming
 			wmode: "window"
 	
-		}).setPlaylist(testPlaylist);
-		//});
+		});
+
+		if (useJsonPlaylist) {
+			myPlaylist.setPlaylist(jsonPlaylist);
+		} else {
+			$.when(
+				$.ajax({
+					type: "GET",
+					url: "dist/playlist/playlist.xml",
+					dataType: "xml",
+				})
+			).then(function(data) {
+				var playlist = [];
+					$(data).find('track').each(function(){
+						var self = $(this),
+							 mytitle = self.find('title').text(),
+							 myartist = self.find('artist').text(),
+							 mymp3 = self.find('mp3').text(),
+							 myduration = self.find('duration').text(),
+							 playlistJsonString = JSON.stringify({ title: mytitle, artist : myartist, mp3 : mymp3, duration : myduration }),// Convert the XML nodes into JSON formatted strings
+							 playlistObject = $.parseJSON(playlistJsonString); // Convert the JSON formatted strings into JSON objects and add to playlist
+
+						playlist.push(playlistObject);
+					});
+
+				myPlaylist.setPlaylist(playlist);
+			});
+		}
 	}());

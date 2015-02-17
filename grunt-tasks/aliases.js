@@ -3,11 +3,11 @@
 module.exports = {
 
 	// Register Build Tasks
-	'js'		:['concat:js', 'uglify'],
+	'js'		:['jshint','concat:js', 'uglify'],
 	'css'		:['less', 'concat:css', 'cssmin'],
-	'build'		:['clean:build', 'css', 'js','copy'],
+	'build'		:['clean', 'css', 'js','copy'],
 
 	// Register Dev Tasks
-	'base'		:['jshint', 'less', 'concat:css', 'concat:js', 'clean:css', 'copy'],
+	'base'		:['clean:js', 'clean:css', 'css', 'js', 'copy:dev'],
 	'default'	:['base', 'watch']
 };

@@ -20,15 +20,14 @@ module.exports = {
 		options: {
 			livereload: true
 		},
-
 		jshint_main: {
 			files: ['<%= files.grunt %>', '<%= files.js %>'],
-			tasks: ['jshint']
+			tasks: ['jshint', 'clean:js', 'concat:js', 'uglify', 'copy:dev']
 		},
 
 		less: {
 			files: ['<%= files.less %>'],
-			tasks: ['less', 'concat:css', 'clean', 'copy:dev']
+			tasks: ['clean:css', 'less', 'concat:css','cssmin']
 		}
 	}
 

@@ -31,17 +31,5 @@ module.exports = {
 						'<%= build.css %>/app.min.css' : ['<%= build.css %>/app.css']
 				}
 			}
-		},
-		copy: {
-			prod: {
-				files: [
-					{expand: true, cwd: '<%= folders.src %>/img',  src: ['*'], dest: '<%= folders.build %>/img'},
-					{expand: true, cwd: '<%= folders.src %>/scripts',  src: ['*'], dest: '<%= folders.build %>/scripts'},
-					{expand: true, cwd: '<%= folders.src %>/js/app/playlist',  src: ['*'], dest: '<%= folders.build %>/playlist'}
-				]	
-			}
-		},
-		clean: {
-			build: ['<%= folders.build %>/**/*']
 		}
 };

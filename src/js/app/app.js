@@ -1,5 +1,5 @@
 (function() {
-	var useJsonPlaylist = true, 
+	var useJsonPlaylist = true;
 
 		// WhiteNoise Player instance
 		whiteNoise = new CirclePlayer("#white-noise-player", {}, {
@@ -10,9 +10,7 @@
 		myPlaylist = new jPlayerPlaylist({
 			jPlayer: "#white-noise-player",
 			cssSelectorAncestor: "#cp_container",
-		}, [ 
-				// Playlist is created when the page loads
-			], 
+		}, [ /* Playlist is creted when page loads */], 
 		{
 			playlistOptions: {
 			  autoPlay: false, // self explanatory
@@ -27,7 +25,6 @@
 			swfPath: "../../scripts",
 			supplied: "mp3", // add the file format extension you will be streaming
 			wmode: "window"
-	
 		});
 
 		if (useJsonPlaylist) {

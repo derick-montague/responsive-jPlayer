@@ -7,9 +7,10 @@ A responsive audio player utilizing the open source jPlayer library (<a href="ht
 #Set Up
 1. NPM install (bower components coming soon)
 2. grunt build
-  * The default grunt task will run development tasks and set a watch, so use Chrome and the Live Reload extension for development.
-3.Playlist
   * Update either the src/js/app/playlist.js or .xml file. If you are going to use the XML file, you will need to set the "useJsonPlaylist" variable to false in the **src/js/app/app.js** file and then run grunt build.
+  * The default grunt task will run development tasks and set a watch, so use Chrome and the Live Reload extension for development.
+
+
 
   
 View the live player at <a href="http://www.beyondhyper.com/jplayer/">http://www.beyondhyper.com/jplayer/</a>

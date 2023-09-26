@@ -11,8 +11,4 @@ A responsive audio player utilizing the open source jPlayer library (<a href="ht
   * The default grunt task will run development tasks and set a watch, so use Chrome and the Live Reload extension for development.
 
 
-
-  
-View the live player at <a href="http://www.beyondhyper.com/jplayer/">http://www.beyondhyper.com/jplayer/</a>
-
 Many, many thanks to <a href="https://github.com/thepag">Mark Panaghiston</a> (<a href="https://twitter.com/thepag">@thepag</a>) for such a great framework!
